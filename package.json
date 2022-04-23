@@ -1,0 +1,31 @@
+{
+  "name": "appnew",
+  "version": "1.0.0",
+  "description": "learning rails",
+  "main": "babel.config.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/warrendk/RailsLearning.git"
+  },
+  "author": "warren kidman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/warrendk/RailsLearning/issues"
+  },
+  "homepage": "https://github.com/warrendk/RailsLearning#readme",
+  "dependencies": {
+    "@rails/webpacker": "5.4.3",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3"
+  }
+}

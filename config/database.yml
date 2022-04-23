@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: myappDatabase
+  pool: 5
+  username: appnew
+  password: 9495592
+  port: 5432
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: myappDatabase
+  pool: 5
+  username: appnew
+  password: 9495592
+  port: 5432

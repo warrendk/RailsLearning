@@ -1,0 +1,11 @@
+<!-- Auto close alert by fading out -->
+<script> setTimeout(() => {  $('#warning-alert').hide('fade'); }, 3000); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert" id="warning-alert">
+  <%= notice %>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+

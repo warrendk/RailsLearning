@@ -1,0 +1,49 @@
+<%= form_with(model: friend) do |form| %>
+<div class="card-body bg-lightgrey">
+  <% if friend.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(friend.errors.count, "error") %> prohibited this friend from being saved:</h2>
+
+      <ul>
+        <% friend.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-label-group text-left">
+    <%= form.text_field :first_name, class:"form-control", placeholder:"first name", id:"inputFirstName" %>
+    <label for="inputFirstName">First Name</label>
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= form.text_field :last_name, class:"form-control", placeholder:"last name", id:"inputLastName" %>
+    <label for="inputLastName">Last Name</label>
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= form.text_field :email, class:"form-control", placeholder:"youremail@example.com", id:"inputEmail" %>
+    <label for="inputEmail">Email Address</label>
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= form.text_field :phone, class:"form-control", placeholder:"phone number", id:"inputPhone" %>
+    <label for="inputPhone">Phone Number</label>
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= form.text_field :twitter, class:"form-control", placeholder:"@twittername", id:"inputTwitter"%>
+    <label for="inputTwitter">Twitter Address</label>
+  </div>
+
+  <!-- User ID Hidden -->
+  <%= form.number_field :user_id, class:"form-control", value:current_user.id, id: :friend_user_id, type: :hidden%>
+   
+  </div>
+  <div class="card-footer bg-dark">
+  <div class="actions">
+    <%= form.submit class:"btn btn-dark btn-outline-success" %>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,36 @@
+<%= form_for(resource, :html => {:class => 'form-signin'}, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+<div class="text-center">
+  <%= image_tag("bootstrap-solid.svg", width: '150px')%>
+  <br/><br/>
+
+  <h1 class="h3 mb-3 font-weight-normal">Please Sign Up</h1>
+  
+  <div class="form-label-group text-left">
+    <%= f.email_field :email, class:"form-control", placeholder:"example@email.com", id:"inputEmail", autofocus: true, autocomplete: "email"%>
+    <label for="inputEmail">Email Address</label>
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= f.password_field :password, class:"form-control", placeholder:"password", id:"inputPassword", autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <label for="inputPassword">Password: <%= @minimum_password_length %> characters minimum</label>
+    <% else %>
+      <label for="inputPassword">Password</label>
+    <% end %>
+    
+  </div>
+
+  <div class="form-label-group text-left">
+    <%= f.password_field :password_confirmation, class:"form-control", placeholder:"confirm password", id:"inputConfirm", autocomplete: "new-password" %>
+    <label for="inputConfirm">Confirm Password</label>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Sign up", class:"btn btn-primary" %>
+    <%= render "devise/shared/links"%>
+  </div>
+<% end %>
+
+
