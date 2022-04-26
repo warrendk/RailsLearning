@@ -1,34 +1,34 @@
 <% if user_signed_in? %>
   <h1>Friend List</h1>
-  <table class="table table-striped table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Twitter</th>
-        <th>User ID</th>
-        <th colspan="1"></th>
-      </tr>
-    </thead>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Twitter</th>
+          <th colspan="1"></th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <% @friends.each do |friend|%>
-        <% if friend.user == current_user %>
-          <tr>
-            <td>
-              <%= link_to friend.first_name + ' ' + friend.last_name, friend, class: "friend-name"%>
-            </td>
-            <td><%= friend.email %></td>
-            <td><%= friend.phone %></td>
-            <td><%= friend.twitter %></td>
-            <td><%= friend.user_id%></td>
-            <td><%= link_to 'Delete', friend, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-outline-danger btn-dark btn-sm" %></td>
-          </tr>
+      <tbody>
+        <% @friends.each do |friend|%>
+          <% if friend.user == current_user %>
+            <tr>
+              <td>
+                <%= link_to friend.first_name + ' ' + friend.last_name, friend, class: "friend-name"%>
+              </td>
+              <td><%= friend.email %></td>
+              <td><%= friend.phone %></td>
+              <td><%= friend.twitter %></td>
+              <td class="text-center"><%= button_to 'Delete', friend, method: :delete, :onclick => "return confirm('Are you sure?')", class: "btn btn-sm btn-dark btn-outline-danger"%></td>
+            </tr>
+          <% end %>
         <% end %>
-      <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 
   <br>
 

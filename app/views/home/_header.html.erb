@@ -1,21 +1,23 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand position-absolute mx-0" href="#">
+<nav class="navbar navbar-expand-custom navbar-dark bd-navbar static-top bg-dark" aria-label="Main navigation">
+  
+  <a class="navbar-brand p-0 me-2 position-absolute" href="/" aria-label="Bootstrap">
     <%= link_to 'Friend App', 
         root_path,
-        class:"navbar-brand" %>
+        class:"navbar-brand mx-3" %>
   </a>
-  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+
+  <button class="navbar-toggler mx-3 m-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="navbar-collapse offcanvas-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
+
+  <div class="collapse navbar-collapse mx-3" id="navbarNavDropdown">
+    <ul class="navbar-nav nav-tabs flex-row flex-wrap bd-navbar-nav p-0 me-2">
+      <li class="nav-item col-3 col-md-auto m-1">
           <%= link_to 'About Us', 
               home_about_path,
               class:"nav-link" %>
       </li>
-
-      <li class="nav-item">
+      <li class="nav-item col-3 col-md-auto m-1">
           <%= link_to 'Example', 
               home_test_path,
               class:"nav-link" %>
@@ -23,38 +25,40 @@
       
       <!-- Signed in:  -->
       <% if user_signed_in? %>
-        <li class="nav-item">
+        <li class="nav-item col-3 col-md-auto m-1">
           <%= link_to 'Sign Out', 
               destroy_user_session_path,
               method: :delete,
               class:"nav-link" %>
         </li>
-        <li class="nav-item">
+        <li class="nav-item col-3 col-md-auto m-1">
             <%= link_to 'Profile', 
                 edit_user_registration_path ,
                 class:"nav-link" %>
         </li>
-        <li class="nav-item">
+        <li class="nav-item col-3 col-md-auto m-1">
             <%= link_to 'Add Friend', 
                 new_friend_path ,
                 class:"nav-link" %>
         </li>
       <!-- Signed out: -->  
       <% else %>
-        <li class="nav-item">
+        <li class="nav-item col-3 col-md-auto m-1">
             <%= link_to 'Sign Up', 
                 new_user_registration_path ,
                 class:"nav-link" %>
         </li>
-         <li class="nav-item">
-            <%= link_to 'Sign In', 
-                new_user_session_path,
-                class:"nav-link" %>
+        <li class="nav-item col-3 col-md-auto m-1">
+          <%= link_to 'Sign In', 
+              new_user_session_path,
+              class:"nav-link" %>
         </li>
       <% end %>  
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+
+    <ul class="navbar-nav flex-row flex-wrap ms-md-auto m-2"><!-- Room for small stuff next to search--></ul>
+    <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  delete 'friends/:id', to:'friends#destroy'
   devise_for :users
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'

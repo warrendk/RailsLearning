@@ -45,6 +45,7 @@ class FriendsController < ApplicationController
 
   # PATCH/PUT /friends/1 or /friends/1.json
   def update
+    puts "Hello from destroy" + "\n" + "Hello from destroy" + "\n" + "Hello from destroy" + "\n" + "Hello from destroy" + "\n" + "Hello from destroy" + "\n"
     respond_to do |format|
       if @friend.update(friend_params)
         format.html { redirect_to friend_url(@friend), notice: "Friend was successfully updated." }
@@ -61,12 +62,12 @@ class FriendsController < ApplicationController
     redirect_to friends_path, notice: "Not Authroized To Edit This Friend" if @friend.nil?
   end
 
-  # DELETE /friends/1 or /friends/1.json
+  # DELETE /friends/1
+  # DELETE /friends/1.json
   def destroy
     @friend.destroy
-
     respond_to do |format|
-      format.html { redirect_to friends_url, notice: "Friend was successfully destroyed." }
+      format.html { redirect_to friends_url, notice: 'Friend was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
