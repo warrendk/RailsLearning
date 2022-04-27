@@ -1,110 +1,51 @@
-<head> 
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-</head>
-<body>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-4 themed-grid-col"> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-		<div class='col-4 themed-grid-col'> Hello </div>
-	</div>
-</body>
+<script> 
+  window.addEventListener("load", function(){setUp();});
+</script>
+<%= javascript_pack_tag 'wordle' %>
+
+
+<div class="outer-div my-1">
+  
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>
+<div class="outer-div my-1">
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>
+<div class="outer-div my-1">
+  
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>
+<div class="outer-div my-1">
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>
+<div class="outer-div my-1">
+  
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>
+<div class="outer-div my-1">
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+    <textarea class="form square m-auto" onkeyup="move(this)"></textarea>
+</div>

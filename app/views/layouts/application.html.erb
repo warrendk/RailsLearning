@@ -25,11 +25,12 @@
     <%= stylesheet_link_tag 'grid', media: 'all', 'data-turbolinks-track': 'reload' %>
 
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  
   </head>
 
   <body>
     <%= render 'home/header' %>
-    <div class="container">
+    <div class="container-lg">
       <% if notice %>
         <%= render 'layouts/alerts' %>
       <% end %>

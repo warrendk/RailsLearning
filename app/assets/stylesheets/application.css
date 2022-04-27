@@ -17,17 +17,52 @@
 /* Remove padding for body, allows us to use our own custom padding.
  * body was causing an issue where the nav bar had an ugly spacing above it. 
  */
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
+
 body {
     margin-top: 0!important;
     padding-top: 0!important
 } 
 
-.custom-container {
-    width: 100%;
-    padding-right: -7.5rem;
-    padding-left: -7.5rem;
-    margin-right: -7.5rem;
-    margin-left: -7.5rem
+div.outer-div {
+  height: 100px;
+  width: 555px;
+  text-align: center;
+
+}
+
+div.middle-div {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  height: 100px;
+}
+
+textarea.square {
+  resize: none;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  border:  solid lightgrey;
+  border-width: medium;
+  font-size: 60px;
+  text-align: center;
+  line-height: 95px;
+  text-transform: uppercase;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight:700;
+}
+
+textarea.square:focus { 
+    outline: none !important;
+}
+
+.container {
+    padding-right: var(--bs-gutter-x,.25rem);
+    padding-left: var(--bs-gutter-x,.25rem);
 }
 
 .bg-lightgrey {
@@ -55,7 +90,7 @@ body {
 }
 
 /* Allows us to set the width-breakpoint for collapsing the navbar */
-@media (min-width: 875px) {
+@media (min-width: 950px) {
     .navbar-expand-custom {
         flex-wrap:nowrap;
         justify-content: flex-start
