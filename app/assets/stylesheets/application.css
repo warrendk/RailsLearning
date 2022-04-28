@@ -16,48 +16,153 @@
 
 /* Remove padding for body, allows us to use our own custom padding.
  * body was causing an issue where the nav bar had an ugly spacing above it. 
- */
 
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
+ * @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap');
+*/
+
+:root {
+    --outer-div-width: 450;
+    --square-size: calc(calc(var(--outer-div-width)/50) * 1vmin);
+    --square-margins: calc(var(--square-size)/17);
+    --row-width: calc(var(--square-size)*5.25);
+    --row-margin: calc(var(--row-width)/15);
+}
 
 body {
     margin-top: 0!important;
     padding-top: 0!important
 } 
 
-div.outer-div {
-  height: 100px;
-  width: 555px;
-  text-align: center;
+.alert-wordle {
+position: relative;
+    padding: .51vmin;
+    margin-bottom: .51vmin;
+    border-radius: .25rem;
+    font-size: 2.5vmin;
+    text-align: center;
+    height: 5vmin;
+    line-height: 4.575vmin;
+    width: var(--row-width);
+    margin-left: var(--row-margin);
+}
+.hidden-form {
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding:  0!important;
+    border:  0!important;
+}
+
+.outer-div {
+    width: 100%;
+    max-width: calc(var(--outer-div-width)*1px);
+    margin: 0 auto;
+    height: calc(100% - 5vmin);
+    display: flex;
+    flex-direction: column;
+    flex:  1;
+}
+
+.middle-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    flex:  1;
+    overflow: hidden;
 
 }
 
-div.middle-div {
-  position: relative;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  height: 100px;
+.inner-div {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    /*grid-gap: 1vmin;
+    padding: 2vmin;*/
+    row-gap: 0!important;
+    column-gap: 0!important;
+    box-sizing: border-box;
+
+}
+
+.row-div {
+    display: flex;
+    grid-template-columns: repeat(5, 1fr);
+    /*grid-gap: 1vmin;*/
+    margin-top: var(--square-margins);
+    margin-bottom: var(--square-margins);
+    width: var(--row-width);
+    margin-left: var(--row-margin);
+}
+
+.row-div-10 {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    /*grid-gap: 1vmin;*/
+    margin-top: var(--square-margins);
+    margin-bottom: var(--square-margins);
+    width: var(--row-width);
+    margin-left: var(--row-margin);
+}
+
+.row-div-9 {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    /*grid-gap: 1vmin;*/
+    margin-top: var(--square-margins);
+    margin-bottom: var(--square-margins);
+    width: calc(var(--row-width)*.9);
+    margin-left: calc(var(--row-width)/8.75);
+}
+
+.row-div-7 {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /*grid-gap: 1vmin;*/
+    margin-top: var(--square-margins);
+    margin-bottom: var(--square-margins);
+    width: calc(var(--row-width)*.7);
+    margin-left: calc(var(--row-width)/4.7);
 }
 
 textarea.square {
-  resize: none;
-  width: 100px;
-  height: 100px;
-  display: inline-block;
-  border:  solid lightgrey;
-  border-width: medium;
-  font-size: 60px;
-  text-align: center;
-  line-height: 95px;
-  text-transform: uppercase;
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight:700;
+    resize: none;
+    width: var(--square-size);
+    height: var(--square-size);
+    font-size: calc(var(--square-size)/2);
+    line-height: calc(var(--square-size)/1.1);
+    vertical-align: middle;
+    text-align: center;
+    border:  solid lightgrey .5vmin;
+    text-transform: uppercase;
+    font-weight:700;
+    box-sizing: border-box;
+    border-radius: 0.5vmin;
+    overflow: hidden;
 }
 
-textarea.square:focus { 
-    outline: none !important;
+textarea.keyboard {
+    resize: none;
+    width: calc(var(--square-size)/2);
+    height: calc(var(--square-size)/2);
+    font-size: calc(var(--square-size)/4);
+    line-height: calc(var(--square-size)/2.5);
+    vertical-align: middle;
+    text-align: center;
+    border:  solid lightgrey 0.4vmin;
+    text-transform: uppercase;
+    font-weight:700;
+    box-sizing: border-box;
+    border-radius: 0.25vmin;
+    overflow: hidden;
+}
+
+textarea.square:focus {
+    outline: none;
+}
+textarea.keyboard:focus {
+    outline: none;
 }
 
 .container {
@@ -86,7 +191,7 @@ textarea.square:focus {
 }
 
 .navbar {
-    margin-bottom: 25px;
+    margin-bottom: 5vmin;
 }
 
 /* Allows us to set the width-breakpoint for collapsing the navbar */

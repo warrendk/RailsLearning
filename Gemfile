@@ -12,7 +12,6 @@ gem 'sass-rails', '>= 6'
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-
 gem 'pg', '~> 1.3', '>= 1.3.5'
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"

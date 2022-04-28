@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   resources :friends
   get 'home/index'
+  get 'home/practice'
   get 'home/about'
   get 'home/test'
   root 'friends#index'

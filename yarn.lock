@@ -3836,7 +3836,14 @@ jest-worker@^26.5.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jquery@^3.6.0:
+jquery-ui@>=1.12.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.13.1.tgz#d0b7a42e73a04c31bb5706adf86f6f8942f64eaa"
+  integrity sha512-2VlU59N5P4HaumDK1Z3XEVjSvegFbEOQRgpHUBaB2Ak98Axl3hFhJ6RFcNQNuk9SfL6WxIbuLst8dW/U56NSiA==
+  dependencies:
+    jquery ">=1.8.0 <4.0.0"
+
+"jquery@>=1.8.0 <4.0.0", jquery@>=3.3.1, jquery@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
@@ -6735,6 +6742,15 @@ vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
+
+virtual-keyboard@^1.30.4:
+  version "1.30.4"
+  resolved "https://registry.yarnpkg.com/virtual-keyboard/-/virtual-keyboard-1.30.4.tgz#e86950fd1d2cf46e735bd60e0a729bee7b050d6a"
+  integrity sha512-5hecQADrwWnf8Rr736jGFv4YkmCwFaf+X+9UxSUBP/33s+UStN/VNm0XViyjt7L10rxBpBsfXQs6M5XjKLyHcA==
+  dependencies:
+    jquery ">=3.3.1"
+  optionalDependencies:
+    jquery-ui ">=1.12.1"
 
 vm-browserify@^1.0.1:
   version "1.1.2"

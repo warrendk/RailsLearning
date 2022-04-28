@@ -1,93 +1,230 @@
-// move to the next textarea upon a insertion
-// go back upon a backspace
-function move(field){
-  var nextId = parseInt(field.id) + 1;
-  var lastId = (nextId % 5) == 1 ? field.id : (nextId - 2);
-  console.log(window.event.keyCode);
-  if(window.event.keyCode == 9)
+var wordSoFar = "";
+var row = 0;
+var randomWord = "";
+var wordSet = new Set();
+var showingNotice = false;
+var invalidWordString = "That word is not in our dictionary :(";
+var correctGuessString = "🔥 Well Done! 🔥"
+var qwerty;
+
+function handleCorrectGuess() {
+
+  document.getElementById("warning-alert").classList += "show";
+  document.getElementById("warning-alert").innerHTML = correctGuessString;
+  document.getElementById("warning-alert").setAttribute("style", "color: #0f5132; background-color: #d1e7dd;");
+  showingNotice = true;
+  return;
+}
+
+function handleGameOver() {
+  document.getElementById("warning-alert").classList += "show";
+  document.getElementById("warning-alert").innerHTML = "The correct word was: " + randomWord;
+  document.getElementById("warning-alert").setAttribute("style", "color: #842029; background-color: #f8d7da;");
+  showingNotice = true;
+  return;
+}
+
+/*
+ * Given a char and a color, update the keyboard to show the user
+ * which letters have been used and their color.
+ */
+function updateKeyboard(char, color)
+{
+  // Q is at id=30, quwerty[0] = Q
+  var id = qwerty.indexOf(char) + 30;
+
+  var curKey = document.getElementById(String(id));
+  curKey.setAttribute("style", "color: white; background-color: " + color);
+}
+/* 
+ * When the user deletes a character: 
+ * Remove the invalid word notice if it is showing.
+ * Change the square value back to blank.
+ * Change the border of the input square back to defualt.
+ */
+function handleDelete(len) {
+  
+  
+  // if the invalid word alert is still showing, remove it
+  if(showingNotice)
   {
-    console.log(window.event.keycode);
-    field.focus();
+      var classList = String(document.getElementById("warning-alert").classList);
+      classList = classList.substring(0, classList.length - 4);
+      document.getElementById("warning-alert").classList = classList;
+      showingNotice = false;
+  }
+
+  // remove last char from word
+  wordSoFar = wordSoFar.slice(0, -1);
+
+  // get the textarea that is being changed and manipulate it
+  var curSquare = document.getElementById(String(row*5 + len - 1));
+  curSquare.value = ""; 
+  curSquare.setAttribute("style", "border-color: lightgrey;");
+
+  return;
+}
+
+/* 
+ * When the user completes a row (5 letters) and hits enter:
+ * If the entered word is invalid, notify user and return.
+ * Else, color the squares accordingly based on letter positions.
+ * Increment row variable and reset wordSoFar
+ * If correct guess, return handleCorrectGuess().
+ */
+function handleEnter() {
+  
+  // make sure word is in the dictionary
+  if(!wordSet.has(wordSoFar.toLowerCase()))
+  {
+    document.getElementById("warning-alert").classList += !showingNotice ? "show" : "";
+    showingNotice = true;
     return;
   }
 
-  // if backspace
-  if(field.value == "")
+  // find greens
+  var holdRand = randomWord;
+  for(var i = 0; i < 5; i++)
   {
-    // if empty before backspace
-    if(field.getAttribute("val") == "")
-    {
-      var last = document.getElementById(String(lastId));
-      last.focus();
-      last.value = "";
-      last.setAttribute("val", field.value); 
-      last.setAttribute("style", "border-color: lightgrey;");
-    }
     
-    else
-      field.setAttribute("style", "border-color: lightgrey;");
+    inputChar = wordSoFar.charAt(i);
+    actualChar = randomWord.charAt(i); 
+    var curSquare = document.getElementById(String(row*5 + i));
+    var styleStr = "color: white; border: 0";
 
-  }
-
-  // if not the last letter
-  else if(parseInt(field.id) % 5 != 4)
-  {
-    var nextElement = document.getElementById(String(nextId));
-    nextElement.focus();
-    field.setAttribute("style", "border-color: grey;");
-  }
-
-  else if(parseInt(field.id) % 5 == 4)
-  {
-    field.setAttribute("style", "border-color: grey;");
-    
-    // if the last letter, move to next row if enter (keycode: 13)
-    // color the squares based on standard wordle rules:
-    // green if letter in correct pos
-    // yellow if letter in word but not right pos
-    // grey if not in word
-    if(window.event.keyCode == 13)
+    // if green...
+    if(inputChar == actualChar)
     {
-      document.getElementById(String(nextId)).focus();
-      var word = ""
-      for(var i = nextId-5; i<nextId; i++)
-        word+= String(document.getElementById(String(i)).value);
+      // change style
+      curSquare.setAttribute("style", "background-color: #6aaa64; " + styleStr); // green
       
-      for(var i = 0; i < 5; i++)
-      {
-        inputChar = word.charAt(i);
-        actualChar = "audio".charAt(i);
-        var curSquare = document.getElementById(String(field.id - 4 + i));
-        curSquare.setAttribute("readonly", "readonly");
-        var styleStr = "color: white; border: 0";
-        if(inputChar == actualChar)
-          curSquare.setAttribute("style", "background-color:#6aaa64; " + styleStr); // green
-        else if("audio".includes(inputChar))
-          curSquare.setAttribute("style", "background-color:#c9b458; " + styleStr); // yellow
-        else if(!"audio".includes(inputChar))
-          curSquare.setAttribute("style", "background-color:grey; " + styleStr); // grey
-      }
+      // replace char with '_' (this helps with correct yellow count)
+      wordSoFar = wordSoFar.substring(0, i) + "_" + wordSoFar.substring(i+1);
+      randomWord = randomWord.substring(0, i) + "_" + randomWord.substring(i+1);
 
+      // update keyboard
+      updateKeyboard(inputChar, "#6aaa64;");
+    }
+
+    // this reperesents all greens (correct guess)
+    if(wordSoFar == "_____")
+      return handleCorrectGuess(); 
+  }
+
+
+  // find yellows and greys
+  for(var i = 0; i < 5; i++)
+  {
+    inputChar = wordSoFar.charAt(i);
+
+    if(inputChar == '_')
+      continue;
+
+    actualChar = randomWord.charAt(i); // (TODO) get random word
+    var curSquare = document.getElementById(String(row*5 + i));
+    var styleStr = "color: white; border: 0";
+
+    // yellow
+    if(randomWord.includes(inputChar))
+    {
+      // change style
+      curSquare.setAttribute("style", "background-color: #c9b458; " + styleStr);
+      
+      // replace char in random word, handles duplicate yellows
+      var yelInd = randomWord.indexOf(inputChar);
+      randomWord = randomWord.substring(0, yelInd) + "_" + randomWord.substring(yelInd+1);
+      // update keyboard
+      updateKeyboard(inputChar, "#c9b458;");
+    }
+
+    // grey
+    else if(!randomWord.includes(inputChar))
+    {
+      curSquare.setAttribute("style", "background-color: grey; " + styleStr); 
+
+      // update keyboard
+      updateKeyboard(inputChar, "grey;");
     }
   }
 
-  field.setAttribute("val", field.value); 
+  randomWord = holdRand;
+
+  // game is over and user got it wrong
+  if(row == 5)
+    return handleGameOver();
+
+  row++;
+  wordSoFar = "";
+  return;
 }
 
-window.move = move;
+/*
+ * Whenever the user enters a key, use one of our helpers to handle it. 
+ */
+function handleInput(key)
+{
+    var wordLen = wordSoFar.length;
 
-// set max chars per text area to 1
-// set the id's to their index in els
-function setUp() {
-    var els = document.querySelectorAll('textarea');
-    const val = document.createAttribute("val");
-    for(var i=0; i<els.length; i++)
+    // 8 = backspace, 46 = delete
+    if(key == 8 || key == 46)
     {
-      els[i].setAttribute("maxlength", 1);
-      els[i].setAttribute("id", i);
-      els[i].setAttribute("val", "");
-      els[i].setAttribute("tabindex", -1);
+      if(wordLen == 0)
+        return;
+
+      return handleDelete(wordLen);
     }
+
+    // if user wants to enter the word
+    if(key == 13 && wordLen == 5)
+    {
+      return handleEnter();
+    }
+
+    // input was a-z
+    if(key >= 65 && key <= 122)
+    {
+
+      if(wordLen == 5)
+        return;
+
+      // get the textarea that is being changed and manipulate it
+      var curSquare = document.getElementById(String(row*5 + wordLen));
+      curSquare.value = String.fromCharCode(key);
+      curSquare.setAttribute("style", "border-color: grey;");
+      wordSoFar += String.fromCharCode(key);
+    }
+
+    return;
+}
+
+window.handleInput = handleInput;
+
+function setUp() {
+
+    // set ids for squares (0-29: user input, 30-56: keyboard)
+    var els = document.querySelectorAll('textarea');
+    for(var i=0; i<els.length; i++)
+      els[i].setAttribute("id", i);
+    
+    
+    // add letters to keyboard
+    qwerty = "QWERTYUIOPASDFGHJKLZXCVBNM";
+    for(var i=0; i < 26; i++)
+      els[i+30].value = qwerty.charAt(i);
+    
+    // get our words list (app/public/wordList.txt)
+    var words = document.getElementById('wordList').getAttribute('data-words');
+    wordSet = new Set(words.split(", ")); // allows for faster .contains()*/
+
+    // get possible answer list (app/public/wordAnswerList.txt)
+    answerArray = document.getElementById('wordAnswerList').getAttribute('data-words');
+    answerArray = answerArray.split(", ");
+    
+    // get a random word from answer list
+    var randIndex = Math.floor(Math.random() * (answerArray.length - 1));
+    randomWord = answerArray[randIndex];
+    randomWord = randomWord.toUpperCase();
 }
 
 window.setUp = setUp;
+
