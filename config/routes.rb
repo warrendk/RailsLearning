@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'home/index'
   get 'home/practice'
   get 'home/about'
-  get 'home/test'
+  get 'home/wordle'
   root 'friends#index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -6,7 +6,7 @@ class HomeController < ApplicationController
     @about_me = "My Name is Warren Kidman"
   end
 
-  def test
+  def wordle
     file = File.open("public/wordList.txt");
     file_data = file.read;
     
