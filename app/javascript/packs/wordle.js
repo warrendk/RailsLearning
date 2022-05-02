@@ -18,10 +18,9 @@ var wordleFunc = (function() {
   var showingNotice = false;
   var invalidWordString = "That word is not in our dictionary :(";
   var correctGuessString = "🏆✨🎉  Well Done!  🎉✨🏆"
-  var qwerty;
+  var qwerty = "QWERTYUIOPASDFGHJKL*ZXCVBNM<";
   var buttonHTML = '<button class="btn btn-dark btn-outline-success new-game-button" onclick="wordleFunc.handleNewGame()" id="new-game-button"><b>New Game</b></button>';
-  var keyboardColors = new Array(26);
-  console.log("working");
+  var keyboardColors = new Array(28);
   var green = "#6aaa64;"
   var yellow = "#c9b458;"
   var grey = "grey;"
@@ -72,9 +71,9 @@ var wordleFunc = (function() {
     getStats();
 
     // make keyboard green
-    var keys = document.querySelectorAll('textarea');
-    for(var i=0; i < 26; i++)
-      keys[i+30].setAttribute("style", "background-color: #d1e7dd; color: #0f5132;");
+    var keys = document.querySelectorAll('.keyboard');
+    for(var i=0; i < 28; i++)
+      keys[i].setAttribute("style", "background-color: #d1e7dd; color: #0f5132;");
     
     // replace the bottom row with a new game button
     document.getElementById("bottom-row").innerHTML = buttonHTML;
@@ -94,9 +93,9 @@ var wordleFunc = (function() {
     getStats();
 
     // make keyboard red
-    var keys = document.querySelectorAll('textarea');
-    for(var i=0; i < 26; i++)
-      keys[i+30].setAttribute("style", "background-color: #f8d7da; color: #842029;");
+    var keys = document.querySelectorAll('.keyboard');
+    for(var i=0; i < 28; i++)
+      keys[i].setAttribute("style", "background-color: #f8d7da; color: #842029;");
 
     // replace the bottom row with a new game button
     document.getElementById("bottom-row").innerHTML = buttonHTML;
@@ -252,24 +251,30 @@ var wordleFunc = (function() {
     setUp: function() {
 
         // set ids for squares (0-29: user input, 30-56: keyboard)
-        var els = document.querySelectorAll('textarea');
-        for(var i=0; i<els.length; i++)
+        var squares = document.querySelectorAll('textarea');
+        for(var i=0; i<squares.length; i++)
         {
-          els[i].setAttribute("id", i);
-          els[i].value = "";
-          els[i].setAttribute("style", "background-color: white; color: black; border:  solid lightgrey .3vmin;")
+          squares[i].setAttribute("id", i);
+          squares[i].value = "";
+          squares[i].setAttribute("style", "background-color: white; color: black; border:  solid lightgrey .3vmin;")
         }
         
+        squares = document.querySelectorAll('.keyboard');
         // add letters to keyboard
-        qwerty = "QWERTYUIOPASDFGHJKLZXCVBNM";
-        for(var i=0; i < 26; i++)
+        for(var i=0; i < 28; i++)
         {
-          els[i+30].value = qwerty.charAt(i);
-          els[i+30].setAttribute("style", "background-color: white; color: black;")
+          squares[i].setAttribute("id", i+30);
+          squares[i].innerHTML = qwerty.charAt(i);
+          squares[i].setAttribute("style", "background-color: lightgrey; color: black;")
 
           // 0 = white, 1 = grey, 2 = yellow, 3 = green
           keyboardColors[i] = 0;
         }
+
+        squares[19].innerHTML = "ENTER";
+        squares[19].setAttribute("style", "background-color: lightgrey; color: black; font-size: calc(var(--square-size)/5);")
+        squares[27].innerHTML = "⌫";
+        squares[27].setAttribute("style", "background-color: lightgrey; color: black; font-size: calc(var(--square-size)/3);")
         
         // get our words list (app/public/wordList.txt)
         var words = document.getElementById('wordList').getAttribute('data-words');
@@ -334,11 +339,16 @@ var wordleFunc = (function() {
       }
 
       // reset bottom row of keyboard
-      var bottomRow = document.getElementById("bottom-row");
-      bottomRow.innerHTML = '<div class="row-div-7">';
+      var bottomRowStr = "";
+      bottomRowStr = '<div class="row-div-bottom">\n';
+      bottomRowStr += '<button class="keyboard keyboard-symbol keyboard-letters" onclick="keyPress(this)"></button>\n';
+
       for(var i = 0; i < 7; i++)
-        bottomRow.innerHTML += '<textarea class="keyboard keyboard-letters" readonly></textarea>\n';
-      bottomRow.innerHTML += '</div>';
+        bottomRowStr += '<button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>\n';
+
+      bottomRowStr += '<button class="keyboard keyboard-symbol keyboard-letters" onclick="keyPress(this)"></button>\n';
+      bottomRowStr += '</div>';
+      document.getElementById("bottom-row").innerHTML = bottomRowStr;
 
       // reset overlay
       document.getElementById("overlay").setAttribute("style", "z-index: -100");
@@ -350,6 +360,17 @@ var wordleFunc = (function() {
       row = 0;
 
       gameOver = false;
+    },
+
+    /* Virtual keyboard */
+    keyPress: function(element) {
+      // enter and backspace / delete
+      if(element.id == "49") return wordleFunc.handleInput("13");
+      if(element.id == "57") return wordleFunc.handleInput("8");
+
+      // the rest of the characters
+      return wordleFunc.handleInput(element.innerHTML.charCodeAt(0));
+
     }
 
   };})();

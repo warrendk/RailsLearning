@@ -21,8 +21,8 @@
 */
 
 :root {
-    --game-area-width: 475;
-    --square-size: calc(calc(var(--game-area-width)/50) * 1vmin);
+    --game-area-width: 400;
+    --square-size: 60px;
     --square-size-half: calc(var(--square-size)/2);
     --square-size-quart: calc(var(--square-size)/4);
     --square-margins: calc(var(--square-size)/17);
@@ -33,9 +33,20 @@
 }
 
 
-@media(max-width: 600px) {
+
+@media(max-height: 725px) {
     :root {
-        --game-area-width: 700;
+        --game-area-width: 400;
+        --square-size: calc(calc(var(--game-area-width)/50) * 1vh);
+        --square-size-half: calc(var(--square-size)/2);
+        --square-size-quart: calc(var(--square-size)/4);
+        --square-margins: calc(var(--square-size)/17);
+    }
+}
+
+@media(max-width: 475px) {
+    :root {
+        --game-area-width: 625;
         --square-size: calc(calc(var(--game-area-width)/50) * 1vmin);
         --square-size-half: calc(var(--square-size)/2);
         --square-size-quart: calc(var(--square-size)/4);
@@ -47,6 +58,12 @@ body {
     margin-top: 0!important;
     padding-top: 0!important
 } 
+
+.keyboard-div {
+    position: fixed;
+    bottom: 0;
+    margin: var(--square-size-quart);
+}
 
 
 /* WORDLE TOAST */
@@ -196,19 +213,22 @@ body {
 .row-div-10 {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    margin-bottom: var(--square-margins);
+    margin-bottom: calc(var(--square-size-half)/5);
+    grid-column-gap: calc(var(--square-size-half)/7);
 }
 
 .row-div-9 {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
-    margin-bottom: var(--square-margins);
+    margin-bottom: calc(var(--square-size-half)/5);
+    grid-column-gap: calc(var(--square-size-half)/7);
     
 }
 
-.row-div-7 {
+.row-div-bottom {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: 1.5fr repeat(7, 1fr) 1.5fr;
+    grid-column-gap: calc(var(--square-size-half)/7);
 }
 
 textarea.square {
@@ -230,25 +250,56 @@ textarea.square {
 
 textarea.keyboard {
     resize: none;
-    width: var(--square-size-half);
-    height: var(--square-size-half);
+    width: calc(var(--square-size) / 1.5);
+    height: var(--square-size);
     border:  solid lightgrey 0.2vmin;;
-    border-radius: 0.25vmin;
+    border-radius: 1vmin;
     overflow: hidden;
+    margin-right: auto!important;
+    margin-left: auto!important;
+    background-color: lightgrey;
+}
+
+button.keyboard {
+    display: flex;
+    width: calc(var(--square-size) / 1.5);
+    height: var(--square-size);
+    border:  solid lightgrey 0.2vmin;;
+    border-radius: 1vmin;
+    overflow: hidden;
+    margin-right: auto!important;
+    margin-left: auto!important;
+    background-color: lightgrey;
+    touch-action: manipulation;
+    justify-content: center;
+    align-items: center;
 }
 
 .keyboard-letters {
-    font-size: calc(var(--square-size)/4);
-    line-height: calc(var(--square-size)/2.5);
+    font-size: var(--square-size-quart);
     text-align: center;
     font-weight:700;
     text-transform: uppercase;
+    touch-action: manipulation;
+}
+
+.keyboard-symbol {
+    width: var(--square-size)!important;
 }
 
 textarea.square:focus {
     outline: none;
 }
 textarea.keyboard:focus {
+    outline: none;
+}
+textarea.keyboard-symbol:focus {
+    outline: none;
+}
+button.keyboard-symbol:focus {
+    outline: none;
+}
+button.keyboard:focus {
     outline: none;
 }
 

@@ -6,10 +6,10 @@
   window.addEventListener("keyup", function(){
     wordleFunc.handleInput(window.event.keyCode);
 });
-  // for mobile, clicking/tapping screen will bring up keyboard
-  window.addEventListener("click", function(){
-    document.getElementById("hidden").focus();
-  });
+
+  function keyPress(element) {
+    wordleFunc.keyPress(element);
+  }
 
   function removeOverlay() {
     document.getElementById("overlay").setAttribute("style", "z-index: -100");
@@ -67,109 +67,71 @@
             <textarea class="square wordle-letters" readonly></textarea>
             <textarea class="square wordle-letters" readonly></textarea>
         </div>
-        <!-- KEYBOARD -->
-        <div class="middle-div">
-          <div class="row-div-10">
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-          </div>
-        </div>
-        <div class="middle-div">
-          <div class="row-div-9">
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-          </div>
-        </div>
-        <div class="middle-div" id="bottom-row" style="z-index: 1000;">
-          <div class="row-div-7">
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-              <textarea class="keyboard keyboard-letters" readonly></textarea>
-          </div>
-        </div>
       </div>
-    <div class="overlay" id="overlay">
-      <div class="toast-container game-over-toast">
-        <div id="game-over-toast" class="toast" style="width: 100%;" data-bs-autohide="false">
-          <div class="toast-header game-over-toast-header" id="game-over-header">
-            <strong class="me-auto" id="game-over-header-message">Well Done!</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" onclick="removeOverlay()" aria-label="Close"></button>
-          </div>
-          <div class="toast-body game-over-toast-body">
-            <div class="big-stat-lable">STATISTICS</div>
-            <div class="game-stats">
-              <div class="game-stat-block">
-                <div class="game-stat-row-number">3</div>
-                <div class="game-stat-row-title">Played</div>
-              </div>
-              <div class="game-stat-block">
-                <div class="game-stat-row-number">100</div>
-                <div class="game-stat-row-title">Win%</div>
-              </div>
-              <div class="game-stat-block">
-                <div class="game-stat-row-number">2</div>
-                <div class="game-stat-row-title">Streak</div>
-              </div>
-              <div class="game-stat-block">
-                <div class="game-stat-row-number">2</div>
-                <div class="game-stat-row-title">Max Streak</div>
-              </div>
+      <div class="overlay" id="overlay">
+        <div class="toast-container game-over-toast">
+          <div id="game-over-toast" class="toast" style="width: 100%;" data-bs-autohide="false">
+            <div class="toast-header game-over-toast-header" id="game-over-header">
+              <strong class="me-auto" id="game-over-header-message">Well Done!</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" onclick="removeOverlay()" aria-label="Close"></button>
             </div>
-            <div class="big-stat-lable">GUESS DISTRIBUTION</div>
-            <div class="guess-distribution-rows">
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">1</div>
-                <div class="guess-bar v-center" id="guess-bar-1">
-                  <div class="v-center guess-number-total" id="guess-total-1">1</div>
+            <div class="toast-body game-over-toast-body">
+              <div class="big-stat-lable">STATISTICS</div>
+              <div class="game-stats">
+                <div class="game-stat-block">
+                  <div class="game-stat-row-number">3</div>
+                  <div class="game-stat-row-title">Played</div>
+                </div>
+                <div class="game-stat-block">
+                  <div class="game-stat-row-number">100</div>
+                  <div class="game-stat-row-title">Win%</div>
+                </div>
+                <div class="game-stat-block">
+                  <div class="game-stat-row-number">2</div>
+                  <div class="game-stat-row-title">Streak</div>
+                </div>
+                <div class="game-stat-block">
+                  <div class="game-stat-row-number">2</div>
+                  <div class="game-stat-row-title">Max Streak</div>
                 </div>
               </div>
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">2</div>
-                <div class="guess-bar v-center" id="guess-bar-2">
-                  <div class="v-center guess-number-total" id="guess-total-2">1</div>
+              <div class="big-stat-lable">GUESS DISTRIBUTION</div>
+              <div class="guess-distribution-rows">
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">1</div>
+                  <div class="guess-bar v-center" id="guess-bar-1">
+                    <div class="v-center guess-number-total" id="guess-total-1">1</div>
+                  </div>
                 </div>
-              </div>
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">3</div>
-                <div class="guess-bar v-center" id="guess-bar-3">
-                  <div class="v-center guess-number-total" id="guess-total-3">1</div>
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">2</div>
+                  <div class="guess-bar v-center" id="guess-bar-2">
+                    <div class="v-center guess-number-total" id="guess-total-2">1</div>
+                  </div>
                 </div>
-              </div>
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">4</div>
-                <div class="guess-bar v-center" id="guess-bar-4">
-                  <div class="v-center guess-number-total" id="guess-total-4">1</div>
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">3</div>
+                  <div class="guess-bar v-center" id="guess-bar-3">
+                    <div class="v-center guess-number-total" id="guess-total-3">1</div>
+                  </div>
                 </div>
-              </div>
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">5</div>
-                <div class="guess-bar v-center" id="guess-bar-5">
-                  <div class="v-center guess-number-total" id="guess-total-5">1</div>
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">4</div>
+                  <div class="guess-bar v-center" id="guess-bar-4">
+                    <div class="v-center guess-number-total" id="guess-total-4">1</div>
+                  </div>
                 </div>
-              </div>
-              <div class="guess-distribution-columns">
-                <div class="guess-number v-center">6</div>
-                <div class="guess-bar v-center" id="guess-bar-6">
-                  <div class="v-center guess-number-total" id="guess-total-6">1</div>
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">5</div>
+                  <div class="guess-bar v-center" id="guess-bar-5">
+                    <div class="v-center guess-number-total" id="guess-total-5">1</div>
+                  </div>
+                </div>
+                <div class="guess-distribution-columns">
+                  <div class="guess-number v-center">6</div>
+                  <div class="guess-bar v-center" id="guess-bar-6">
+                    <div class="v-center guess-number-total" id="guess-total-6">1</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -178,10 +140,53 @@
       </div>
     </div>
   </div>
+<div class="middle-div">
+<div class="middle-div keyboard-div">
+  <div>
+    <!-- KEYBOARD -->
+    <div class="middle-div">
+      <div class="row-div-10">
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+      </div>
+    </div>
+    <div class="middle-div">
+      <div class="row-div-9">
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+      </div>
+    </div>
+    <div class="middle-div" id="bottom-row" style="z-index: 1000;">
+      <div class="row-div-bottom">
+        <button class="keyboard keyboard-symbol keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
+        <button class="keyboard keyboard-symbol keyboard-letters" onclick="keyPress(this)"></button>
+      </div>
+    </div>
+  </div>
 </div>
-
-<!-- hacky workaround to bring up keyboard on mobile -->
-<input class="form hidden-form" id="hidden" readonly>
+</div>
 
 <%= content_tag :div, id: "wordList", data: {words: @wordList} do %><% end %>
 <%= content_tag :div, id: "wordAnswerList", data: {words: @wordAnswerList} do %><% end %>
