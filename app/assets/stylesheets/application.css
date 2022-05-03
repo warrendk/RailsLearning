@@ -32,8 +32,6 @@
 
 }
 
-
-
 @media(max-height: 725px) {
     :root {
         --game-area-width: 400;
@@ -181,11 +179,14 @@ body {
 /* WORDLE GAME AREA */
 /* ************************************************* */
 .new-game-button {
+    display: flex;
     width: 100%;
-    height: var(--square-size-half);
-    font-size: calc(var(--square-size)/4);
+    height: var(--square-size);
+    font-size: var(--square-size-half);
     font-weight:700;
     text-transform: uppercase;
+    justify-content: center;
+    align-items: center;
 }
 
 .alert-wordle {

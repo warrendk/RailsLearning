@@ -17,27 +17,42 @@ var wordleFunc = (function() {
   var gameOver = false;
   var showingNotice = false;
   var invalidWordString = "That word is not in our dictionary :(";
-  var correctGuessString = "🏆✨🎉  Well Done!  🎉✨🏆"
+  var correctGuessString = "🏆✨ Well Done! ✨🏆"
   var qwerty = "QWERTYUIOPASDFGHJKL*ZXCVBNM<";
   var buttonHTML = '<button class="btn btn-dark btn-outline-success new-game-button" onclick="wordleFunc.handleNewGame()" id="new-game-button"><b>New Game</b></button>';
   var keyboardColors = new Array(28);
   var green = "#6aaa64;"
   var yellow = "#c9b458;"
   var grey = "grey;"
+  var gamesPlayed = 0;
+  var gamesWon = 0;
+  var streak = 0;
+  var maxStreak = 0;
 
   // index 0 holds the max, rest hold number of tries user took to guess word
   var guessDist = new Array(6);
 
   
   /* Update the stats displayed to the user based on the last game*/
-  function getStats() {
+  function getStats(won) {
     
+    var statNums = document.querySelectorAll(".game-stat-row-number");
+    maxStreak = Math.max(streak, maxStreak);
+    gamesPlayed++;
+    statNums[0].innerHTML = gamesPlayed;
+    statNums[1].innerHTML = ((gamesWon/gamesPlayed) * 100).toFixed(1);
+    statNums[2].innerHTML = streak;
+    statNums[3].innerHTML = maxStreak;
+    
+    if(won == false) row=100;
+
     // get the users stats, keep track of the max
     guessDist[0] = -1;
     for(var i = 1; i <= 6; i++)
     {
-      guessDist[i] = i*10;
-      guessDist[0] = Math.max(i*10, guessDist[0]);
+      guessDist[i] = guessDist[i] == null ? 0 : guessDist[i];
+      guessDist[i] += i==row+1? 1 : 0;
+      guessDist[0] = Math.max(guessDist[i], guessDist[0]);
     }
     
     // translates those stats into a bar graph where max.width = 100%
@@ -62,13 +77,15 @@ var wordleFunc = (function() {
    * and a message telling them they won. */
   function handleCorrectGuess() {
     
+    gamesWon++;
+    streak++;
     // tell the user they won and show stats
     document.getElementById("game-over-toast").classList += " show";
     document.getElementById("overlay").setAttribute("style", "z-index: 100");
     var gameOverHeader = document.getElementById("game-over-header");
     document.getElementById("game-over-header-message").innerHTML = correctGuessString;
     document.getElementById("game-over-header").setAttribute("style", "color: #0f5132; background-color: #d1e7dd;");
-    getStats();
+    getStats(true);
 
     // make keyboard green
     var keys = document.querySelectorAll('.keyboard');
@@ -85,12 +102,14 @@ var wordleFunc = (function() {
    * and a message telling them they lost and what the correct word was. */
   function handleGameOverWrong() {
 
+    streak = 0;
+
     // tell the user they lost and show stats
     document.getElementById("game-over-toast").classList += " show";
     document.getElementById("overlay").setAttribute("style", "z-index: 100");
     document.getElementById("game-over-header-message").innerHTML = "The correct word was: " + randomWord;
     document.getElementById("game-over-header").setAttribute("style", "color: #842029; background-color: #f8d7da;");
-    getStats();
+    getStats(false);
 
     // make keyboard red
     var keys = document.querySelectorAll('.keyboard');
