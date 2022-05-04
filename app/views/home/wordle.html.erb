@@ -1,23 +1,29 @@
 <%= javascript_pack_tag 'wordle' %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script> 
-  window.addEventListener("load", function(){
-    wordleFunc.setUp();
-});
-  window.addEventListener("keyup", function(){
-    wordleFunc.handleInput(window.event.keyCode);
-});
 
+  // Get user info from wordle controller and set up the game area
+  window.addEventListener("load", function() {
+    wordleFunc.getUserInfo();
+  });
+  
+  // Update the game based on which character was typed
+  window.addEventListener("keyup", function() {
+    wordleFunc.handleInput(window.event.keyCode);
+  });
+
+  // Update the game based on which character was typed using the virtual keyboard
   function keyPress(element) {
     wordleFunc.keyPress(element);
   }
-
+  
   function removeOverlay() {
     document.getElementById("overlay").setAttribute("style", "z-index: -100");
   }
 </script>
 
 
-<div class="middle-div" id="game-area">
+<div class="flex-center" id="game-area">
   <div class="parent">
     <div>
         <!-- Only displays when user enters invalid word (not in dictionary) -->
@@ -140,11 +146,11 @@
       </div>
     </div>
   </div>
-<div class="middle-div">
-<div class="middle-div keyboard-div">
+<div class="flex-center">
+<div class="flex-center keyboard-div">
   <div>
     <!-- KEYBOARD -->
-    <div class="middle-div">
+    <div class="flex-center">
       <div class="row-div-10">
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
@@ -158,7 +164,7 @@
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
       </div>
     </div>
-    <div class="middle-div">
+    <div class="flex-center">
       <div class="row-div-9">
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
@@ -171,7 +177,7 @@
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
       </div>
     </div>
-    <div class="middle-div" id="bottom-row" style="z-index: 1000;">
+    <div class="flex-center" id="bottom-row" style="z-index: 1000;">
       <div class="row-div-bottom">
         <button class="keyboard keyboard-symbol keyboard-letters" onclick="keyPress(this)"></button>
         <button class="keyboard keyboard-letters" onclick="keyPress(this)"></button>
@@ -187,6 +193,3 @@
   </div>
 </div>
 </div>
-
-<%= content_tag :div, id: "wordList", data: {words: @wordList} do %><% end %>
-<%= content_tag :div, id: "wordAnswerList", data: {words: @wordAnswerList} do %><% end %>

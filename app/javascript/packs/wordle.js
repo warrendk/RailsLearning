@@ -6,6 +6,10 @@
  * throughout this projcet. */
 var wordleFunc = (function() {
 
+  // all the relavant user info sent from home_controller.rb: def wordle
+  // gets set in setUp
+  var jsonData;
+
   // keep track of current row and word inside the row
   var wordSoFar = "";
   var row = 0;
@@ -14,28 +18,40 @@ var wordleFunc = (function() {
   var randomWord = "";
   var wordSet = new Set();
 
-  var gameOver = false;
-  var showingNotice = false;
+  // helper strings
   var invalidWordString = "That word is not in our dictionary :(";
   var correctGuessString = "🏆✨ Well Done! ✨🏆"
   var qwerty = "QWERTYUIOPASDFGHJKL*ZXCVBNM<";
   var buttonHTML = '<button class="btn btn-dark btn-outline-success new-game-button" onclick="wordleFunc.handleNewGame()" id="new-game-button"><b>New Game</b></button>';
-  var keyboardColors = new Array(28);
   var green = "#6aaa64;"
   var yellow = "#c9b458;"
   var grey = "grey;"
+
+  // track what is shown on the screen
+  var gameOver = false;
+  var showingNotice = false;
+  var keyboardColors = new Array(28);
+
+  // track the users stats for the current game
+  // if user signed in, these all get set on page load 
   var gamesPlayed = 0;
   var gamesWon = 0;
   var streak = 0;
   var maxStreak = 0;
 
-  // index 0 holds the max, rest hold number of tries user took to guess word
+  // index 0 holds the max guess total
+  // index 1-6 hold the number of times the user took index-guesses to answer
   var guessDist = new Array(6);
 
-  
-  /* Update the stats displayed to the user based on the last game*/
+  /* Update the stats displayed to the user based on the last game */
   function getStats(won) {
     
+    if(won == false) row = -1;
+
+    // update the stats in the database if user signed in
+    if(jsonData["signedIn"])
+      wordleFunc.updateUserStats(jsonData, row+1);
+
     var statNums = document.querySelectorAll(".game-stat-row-number");
     maxStreak = Math.max(streak, maxStreak);
     gamesPlayed++;
@@ -44,10 +60,9 @@ var wordleFunc = (function() {
     statNums[2].innerHTML = streak;
     statNums[3].innerHTML = maxStreak;
     
-    if(won == false) row=100;
-
+    
     // get the users stats, keep track of the max
-    guessDist[0] = -1;
+    guessDist[0] = 1;
     for(var i = 1; i <= 6; i++)
     {
       guessDist[i] = guessDist[i] == null ? 0 : guessDist[i];
@@ -60,7 +75,7 @@ var wordleFunc = (function() {
     {
       var bar = document.getElementById("guess-bar-"+i);
       var barNumber = document.getElementById("guess-total-"+i);
-      var percent = guessDist[i]/guessDist[0] * 100;
+      var percent = 10 + (guessDist[i]/guessDist[0] * 90); // 0 should have a width-10% bar
      
       // color current guess bar green, the rest are grey
       if(i == row+1)
@@ -70,7 +85,6 @@ var wordleFunc = (function() {
 
       barNumber.innerHTML = guessDist[i];
     }
-
   }
 
   /* Upon a user getting the correct answer, dispaly a new game button
@@ -163,7 +177,7 @@ var wordleFunc = (function() {
     // get the textarea that is being changed and manipulate it
     var curSquare = document.getElementById(String(row*5 + len - 1));
     curSquare.value = ""; 
-    curSquare.setAttribute("style", "border-color: lightgrey;");
+    curSquare.setAttribute("style", "border: solid lightgrey var(--square-border);");
 
     return;
   }
@@ -267,7 +281,7 @@ var wordleFunc = (function() {
   return {
 
     /* set-up/reset the game board upon a new game. */
-    setUp: function() {
+    setUp: function(json) {
 
         // set ids for squares (0-29: user input, 30-56: keyboard)
         var squares = document.querySelectorAll('textarea');
@@ -275,7 +289,7 @@ var wordleFunc = (function() {
         {
           squares[i].setAttribute("id", i);
           squares[i].value = "";
-          squares[i].setAttribute("style", "background-color: white; color: black; border:  solid lightgrey .3vmin;")
+          squares[i].setAttribute("style", "background-color: white; color: black; border:  solid lightgrey var(--square-border);")
         }
         
         squares = document.querySelectorAll('.keyboard');
@@ -295,13 +309,36 @@ var wordleFunc = (function() {
         squares[27].innerHTML = "⌫";
         squares[27].setAttribute("style", "background-color: lightgrey; color: black; font-size: calc(var(--square-size)/3);")
         
-        // get our words list (app/public/wordList.txt)
-        var words = document.getElementById('wordList').getAttribute('data-words');
-        wordSet = new Set(words.split(", ")); // allows for faster .contains()*/
+        // the wordList, wordAnswerList, and user info grapped via ajax from the home_controller.rb file
+        jsonData = json;
+        
+        // get user stats if signed in and first game played...
+        if(gamesPlayed == 0 && jsonData["signedIn"])
+        {
 
-        // get possible answer list (app/public/wordAnswerList.txt)
-        answerArray = document.getElementById('wordAnswerList').getAttribute('data-words');
-        answerArray = answerArray.split(", ");
+          // guessString is a series of numbers each reprenting their own game.
+          // 1-6 mean the number of guesses that game took, 0 means they couldnt guess.
+          var guessString = jsonData["userStats"].guess_dist;
+          for(var i = 0; i < guessString.length; i++)
+          {
+
+            // incrent index guess by one each time guess is encountered in the string
+            var guess = parseInt(guessString.charAt(i));
+            guessDist[guess] = guessDist[guess] == null ? 1 : guessDist[guess]+1;
+            
+            // guess == 0 -> loss. This ends the current streak they were on. 
+            gamesPlayed++;
+            gamesWon += guess == 0 ? 0 : 1;
+            streak = guess == 0 ? 0 : streak+1;
+            maxStreak = Math.max(streak, maxStreak);
+          }
+        }
+        
+        // words list (app/public/wordList.txt)
+        wordSet = new Set(jsonData["wordList"].split(", ")); // allows for faster .contains()*/
+
+        // possible answer list (app/public/wordAnswerList.txt)
+        answerArray = jsonData["wordAnswerList"].split(", ");
         
         // get a random word from answer list
         var randIndex = Math.floor(Math.random() * (answerArray.length - 1));
@@ -337,7 +374,7 @@ var wordleFunc = (function() {
           // get the textarea that is being changed and manipulate it
           var curSquare = document.getElementById(String(row*5 + wordLen));
           curSquare.value = String.fromCharCode(key);
-          curSquare.setAttribute("style", "border-color: grey;");
+          curSquare.setAttribute("style", "border: solid grey var(--square-border);");
           wordSoFar += String.fromCharCode(key);
         }
 
@@ -374,7 +411,7 @@ var wordleFunc = (function() {
       document.getElementById("game-over-toast").classList = "toast";
       
       // reset everything else
-      wordleFunc.setUp();
+      wordleFunc.setUp(jsonData);
       wordSoFar = "";
       row = 0;
 
@@ -390,6 +427,35 @@ var wordleFunc = (function() {
       // the rest of the characters
       return wordleFunc.handleInput(element.innerHTML.charCodeAt(0));
 
+    },
+
+    /* The application entry point, gets the users info from home_controller: def wordle.
+       Then, passes that info setUp to start the game */
+    getUserInfo: function() {
+      $.ajax({
+        type: 'GET',
+        url: "/home/wordle",
+        dataType: "json",
+        success: function(result) {
+          wordleFunc.setUp(result);
+        }
+      })
+    },
+
+    /* Upon game over, update the users stats in the database. Called in method getStats() */
+    updateUserStats: function(jsonData, guess) {
+      var prevDist = jsonData["userStats"].guess_dist;
+      var statID = jsonData["userStats"].id;
+      var userID = jsonData["userID"];
+      $.ajax({
+        type: 'PATCH',
+        url: "/stats/"+statID,
+        dataType: "json",
+        data: {stat: { guess_dist: prevDist + guess}, commit: "Create Stat"},
+        success: function(result) {
+          jsonData["userStats"] = result;
+        }
+      })
     }
 
   };})();
