@@ -1,9 +1,4 @@
-/* Because this program depends on 'global variables', all the code
- * has been defined inside this function which returns an object
- * containing the functions needed in wordle.html.erb
- * This includes setUp, handleInput, and handleNewGame.
- * This is done so there are no variable name conflicts in other .js files 
- * throughout this projcet. */
+/* returns an object containing fuctions used in wordle.html.erb */
 var wordleFunc = (function() {
 
   // all the relavant user info sent from home_controller.rb: def wordle
@@ -165,9 +160,9 @@ var wordleFunc = (function() {
     // if the invalid word alert is still showing, remove it
     if(showingNotice)
     {
-        var classList = String(document.getElementById("warning-alert").classList);
+        var classList = String(document.getElementById("wordle-alert").classList);
         classList = classList.substring(0, classList.length - 4);
-        document.getElementById("warning-alert").classList = classList;
+        document.getElementById("wordle-alert").classList = classList;
         showingNotice = false;
     }
 
@@ -193,8 +188,8 @@ var wordleFunc = (function() {
     // make sure word is in the dictionary
     if(!wordSet.has(wordSoFar.toLowerCase()))
     {
-      document.getElementById("warning-alert").classList += !showingNotice ? "show" : "";
-      document.getElementById("warning-alert").innerHTML = invalidWordString;
+      document.getElementById("wordle-alert").classList += !showingNotice ? "show" : "";
+      document.getElementById("wordle-alert").innerHTML = invalidWordString;
       showingNotice = true;
       return;
     }
@@ -311,6 +306,9 @@ var wordleFunc = (function() {
         
         // the wordList, wordAnswerList, and user info grapped via ajax from the home_controller.rb file
         jsonData = json;
+
+        if(jsonData["signedIn"])
+          document.getElementById("sign-up-message").classList = "hidden-element";
         
         // get user stats if signed in and first game played...
         if(gamesPlayed == 0 && jsonData["signedIn"])
@@ -338,7 +336,8 @@ var wordleFunc = (function() {
         wordSet = new Set(jsonData["wordList"].split(", ")); // allows for faster .contains()*/
 
         // possible answer list (app/public/wordAnswerList.txt)
-        answerArray = jsonData["wordAnswerList"].split(", ");
+        answerArray = jsonData["wordAnswerList"].split(" ");
+        console.log(answerArray);
         
         // get a random word from answer list
         var randIndex = Math.floor(Math.random() * (answerArray.length - 1));
@@ -387,10 +386,10 @@ var wordleFunc = (function() {
       // remove notice
       if(showingNotice)
       {
-          var classList = String(document.getElementById("warning-alert").classList);
+          var classList = String(document.getElementById("wordle-alert").classList);
           classList = classList.substring(0, classList.length - 4);
-          document.getElementById("warning-alert").classList = classList;
-          document.getElementById("warning-alert").setAttribute("style", "");
+          document.getElementById("wordle-alert").classList = classList;
+          document.getElementById("wordle-alert").setAttribute("style", "");
           showingNotice = false;
       }
 
@@ -430,7 +429,7 @@ var wordleFunc = (function() {
     },
 
     /* The application entry point, gets the users info from home_controller: def wordle.
-       Then, passes that info setUp to start the game */
+       Passes that info setUp to start the game */
     getUserInfo: function() {
       $.ajax({
         type: 'GET',
@@ -451,7 +450,7 @@ var wordleFunc = (function() {
         type: 'PATCH',
         url: "/stats/"+statID,
         dataType: "json",
-        data: {stat: { guess_dist: prevDist + guess}, commit: "Create Stat"},
+        data: {stat: { guess_dist: prevDist + guess}, commit: "Update Stat"},
         success: function(result) {
           jsonData["userStats"] = result;
         }

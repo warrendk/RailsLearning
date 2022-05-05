@@ -61,8 +61,8 @@
     <h5> Cancel my account</h5>
   </div>
   <div class="card-body">
-    <p>Unhappy? Please consider reaching out to us before you cancel your account.</p>
-  <%= button_to "Cancel my account", registration_path(resource_name), class:"btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete %></p>
+    <p>All saved user data is lost upon account cancelation</p>
+  <%= button_to "Cancel my account", registration_path(resource_name), class:"btn btn-danger", data: { confirm: "Are you sure?" }, method: :delete, onclick: "return confirm('Are you sure?')" %></p>
   </div>
 </div>
 

@@ -16,7 +16,7 @@
   function keyPress(element) {
     wordleFunc.keyPress(element);
   }
-  
+
   function removeOverlay() {
     document.getElementById("overlay").setAttribute("style", "z-index: -100");
   }
@@ -27,7 +27,7 @@
   <div class="parent">
     <div>
         <!-- Only displays when user enters invalid word (not in dictionary) -->
-        <div class="alert-wordle alert-warning fade" id="warning-alert">
+        <div class="alert-wordle alert-warning fade" id="wordle-alert">
           <b>That word is not in our dictionary :(</b>
         </div>
         <!-- GAME SQUARES -->
@@ -139,6 +139,12 @@
                     <div class="v-center guess-number-total" id="guess-total-6">1</div>
                   </div>
                 </div>
+              </div>
+              <!-- If user signed in, class="hidden-element"-->
+              <div id="sign-up-message">
+                <%= link_to 'Sign Up', 
+                new_user_registration_path ,
+                class:"nav-link sign-up-text" %>
               </div>
             </div>
           </div>

@@ -1,24 +1,8 @@
-# README
+# LearningRails
+# [Visit here](https://warrenwordle.herokuapp.com/)
+_About:_
+A simple web application built using Ruby on Rails, featuring a Wordle clone built from scratch. There is functionality for making and managing an account as well as storing and displaying stats from previous games. 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+_Application Info:_ 
+Ruby - 3.1.2, Rails - 7.0.2.4, Database - PostgreSQL
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

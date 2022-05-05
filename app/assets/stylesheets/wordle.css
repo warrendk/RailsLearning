@@ -275,3 +275,16 @@ button.keyboard:focus {
     grid-template-columns: 10% 80% 10%;
     
 }
+
+.sign-up-text {
+    font-size: calc(var(--square-size)/3);
+}
+
+.hidden-element {
+    display: none;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+

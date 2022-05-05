@@ -1,5 +1,5 @@
 class StatsController < ApplicationController
-  before_action :set_stat, only: %i[ show edit update destroy ]
+  before_action :set_stat, only: %i[update destroy ]
 
   # GET /stats or /stats.json
   def index
