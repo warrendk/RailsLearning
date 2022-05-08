@@ -59,7 +59,7 @@ textarea.square {
     resize: none;
     width: var(--square-size);
     height: var(--square-size);
-    border:  var(--square-border);
+    border: var(--square-border);
     border-radius: 0.5vmin;
     overflow: hidden;
 }

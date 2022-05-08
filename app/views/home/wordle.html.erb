@@ -1,5 +1,4 @@
 <%= javascript_pack_tag 'wordle' %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script> 
 
   // Get user info from wordle controller and set up the game area
@@ -25,7 +24,7 @@
 
 <div class="flex-center" id="game-area">
   <div class="parent">
-    <div>
+    <div id="game-animate">
         <!-- Only displays when user enters invalid word (not in dictionary) -->
         <div class="alert-wordle alert-warning fade" id="wordle-alert">
           <b>That word is not in our dictionary :(</b>

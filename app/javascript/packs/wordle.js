@@ -41,6 +41,7 @@ var wordleFunc = (function() {
   /* Update the stats displayed to the user based on the last game */
   function getStats(won) {
     
+
     if(won == false) row = -1;
 
     // update the stats in the database if user signed in
@@ -54,7 +55,6 @@ var wordleFunc = (function() {
     statNums[1].innerHTML = ((gamesWon/gamesPlayed) * 100).toFixed(1);
     statNums[2].innerHTML = streak;
     statNums[3].innerHTML = maxStreak;
-    
     
     // get the users stats, keep track of the max
     guessDist[0] = 1;
@@ -80,12 +80,17 @@ var wordleFunc = (function() {
 
       barNumber.innerHTML = guessDist[i];
     }
+
+    animate.toastAnimation(document.getElementById("game-over-toast"), document.querySelectorAll(".guess-bar"));
   }
 
   /* Upon a user getting the correct answer, dispaly a new game button
    * and a message telling them they won. */
   function handleCorrectGuess() {
     
+    animate.gameOverAnimation(document.querySelectorAll(".square"), true);
+
+    setTimeout(function() {
     gamesWon++;
     streak++;
     // tell the user they won and show stats
@@ -94,7 +99,7 @@ var wordleFunc = (function() {
     var gameOverHeader = document.getElementById("game-over-header");
     document.getElementById("game-over-header-message").innerHTML = correctGuessString;
     document.getElementById("game-over-header").setAttribute("style", "color: #0f5132; background-color: #d1e7dd;");
-    getStats(true);
+    
 
     // make keyboard green
     var keys = document.querySelectorAll('.keyboard');
@@ -104,6 +109,9 @@ var wordleFunc = (function() {
     // replace the bottom row with a new game button
     document.getElementById("bottom-row").innerHTML = buttonHTML;
     gameOver = true;
+    
+    getStats(true);
+    }, 1000);
   }
 
 
@@ -111,43 +119,26 @@ var wordleFunc = (function() {
    * and a message telling them they lost and what the correct word was. */
   function handleGameOverWrong() {
 
-    streak = 0;
+    animate.gameOverAnimation(document.querySelectorAll(".square"), false);
+    setTimeout(function() {
+      streak = 0;
 
-    // tell the user they lost and show stats
-    document.getElementById("game-over-toast").classList += " show";
-    document.getElementById("overlay").setAttribute("style", "z-index: 100");
-    document.getElementById("game-over-header-message").innerHTML = "The correct word was: " + randomWord;
-    document.getElementById("game-over-header").setAttribute("style", "color: #842029; background-color: #f8d7da;");
-    getStats(false);
+      // tell the user they lost and show stats
+      document.getElementById("game-over-toast").classList += " show";
+      document.getElementById("overlay").setAttribute("style", "z-index: 100");
+      document.getElementById("game-over-header-message").innerHTML = "The correct word was: " + randomWord;
+      document.getElementById("game-over-header").setAttribute("style", "color: #842029; background-color: #f8d7da;");
+      getStats(false);
 
-    // make keyboard red
-    var keys = document.querySelectorAll('.keyboard');
-    for(var i=0; i < 28; i++)
-      keys[i].setAttribute("style", "background-color: #f8d7da; color: #842029;");
+      // make keyboard red
+      var keys = document.querySelectorAll('.keyboard');
+      for(var i=0; i < 28; i++)
+        keys[i].setAttribute("style", "background-color: #f8d7da; color: #842029;");
 
-    // replace the bottom row with a new game button
-    document.getElementById("bottom-row").innerHTML = buttonHTML;
-    gameOver = true;
-  }
-
-
-  /* Given a char and a color, update the keyboard to show the user
-   * which letters have been used and their color. */
-  function updateKeyboard(char, color, colorInt)
-  {
-    // Q is at id=30, quwerty[0] = Q
-    var id = qwerty.indexOf(char) + 30;
-
-    var curKey = document.getElementById(String(id));
-    
-    // 0 = white, 1 = grey, 2 = yellow, 3 = green
-    var curKeyColor = keyboardColors[id-30];
-    
-    // dont change yellow to grey or green to yellow.
-    if(colorInt <= curKeyColor) return;
-
-    curKey.setAttribute("style", "color: white; background-color: " + color);
-    keyboardColors[id-30] = colorInt;
+      // replace the bottom row with a new game button
+      document.getElementById("bottom-row").innerHTML = buttonHTML;
+      gameOver = true;
+    }, 1250);
   }
 
   /* When the user deletes a character: 
@@ -155,7 +146,6 @@ var wordleFunc = (function() {
    * Change the square value back to blank.
    * Change the border of the input square back to defualt. */
   function handleDelete(len) {
-    
     
     // if the invalid word alert is still showing, remove it
     if(showingNotice)
@@ -173,6 +163,9 @@ var wordleFunc = (function() {
     var curSquare = document.getElementById(String(row*5 + len - 1));
     curSquare.value = ""; 
     curSquare.setAttribute("style", "border: solid lightgrey var(--square-border);");
+    
+    // animate
+    animate.rotate(curSquare);
 
     return;
   }
@@ -188,39 +181,46 @@ var wordleFunc = (function() {
     // make sure word is in the dictionary
     if(!wordSet.has(wordSoFar.toLowerCase()))
     {
-      document.getElementById("wordle-alert").classList += !showingNotice ? "show" : "";
-      document.getElementById("wordle-alert").innerHTML = invalidWordString;
+      var notice = document.getElementById("wordle-alert");
+      notice.classList += !showingNotice ? "show" : "";
+      notice.innerHTML = invalidWordString;
       showingNotice = true;
+      animate.bounce(notice);
+
+      curRow = document.querySelectorAll(".row-div")[row];
+      animate.bounce(curRow);
       return;
     }
+
+    var rowColors = new Array(5);
+    var keyBoardFunctions = new Array(5);
+    var wordSoFarHold = wordSoFar;
+    var wonGame = false;
 
     // find greens
     var holdRand = randomWord;
     for(var i = 0; i < 5; i++)
     {
-      
       inputChar = wordSoFar.charAt(i);
       actualChar = randomWord.charAt(i); 
       var curSquare = document.getElementById(String(row*5 + i));
       var styleStr = "color: white; border: 0";
-
+      
       // if green...
       if(inputChar == actualChar)
       {
-        // change style
-        curSquare.setAttribute("style", "background-color: #6aaa64; " + styleStr); // green
-        
         // replace char with '_' (this helps with correct yellow count)
         wordSoFar = wordSoFar.substring(0, i) + "_" + wordSoFar.substring(i+1);
         randomWord = randomWord.substring(0, i) + "_" + randomWord.substring(i+1);
 
-        // update keyboard
-        updateKeyboard(inputChar, green, 3);
+        // used to update style of the squares and keyboard in animate.reval
+        rowColors[i] = "background-color: #6aaa64; " + styleStr;
+        keyBoardFunctions[i] = green;
       }
 
       // this reperesents all greens (correct guess)
       if(wordSoFar == "_____")
-        return handleCorrectGuess(); 
+        wonGame = true;
     }
 
 
@@ -239,38 +239,41 @@ var wordleFunc = (function() {
       // yellow
       if(randomWord.includes(inputChar))
       {
-        // change style
-        curSquare.setAttribute("style", "background-color: #c9b458; " + styleStr);
-        
         // replace char in random word, handles duplicate yellows
         var yelInd = randomWord.indexOf(inputChar);
         randomWord = randomWord.substring(0, yelInd) + "_" + randomWord.substring(yelInd+1);
-        // update keyboard
-        updateKeyboard(inputChar, yellow, 2);
+        
+        // used to update style of the squares and keyboard in animate.reval
+        rowColors[i] = "background-color: #c9b458; " + styleStr;
+        keyBoardFunctions[i] = yellow;
       }
 
       // grey
       else if(!randomWord.includes(inputChar))
       {
-        curSquare.setAttribute("style", "background-color: grey; " + styleStr); 
-
-        // update keyboard
-        updateKeyboard(inputChar, grey, 1);
+        // used to update style of the squares and keyboard in animate.reval
+        rowColors[i] = "background-color: grey; " + styleStr;
+        keyBoardFunctions[i] = grey;
       }
     }
 
     randomWord = holdRand;
+    
+    // animate all squares in the row
+    animate.reveal(document.querySelectorAll(".square"), rowColors, keyBoardFunctions, row, 0, wordSoFarHold);
+    
+    if(wonGame || row == 5)
+      gameOver = true;
 
-    // game is over and user got it wrong
-    if(row == 5)
-      return handleGameOverWrong();
-
-    row++;
-    wordSoFar = "";
-    return;
+    // wait until reveal animation done
+    setTimeout(function() {
+      if(wonGame) return handleCorrectGuess();
+      if(row == 5) return handleGameOverWrong();
+      
+      wordSoFar = "";
+      row++;
+    }, .35 * 1000 * 7);
   }
-
-
 
   /* Return this object of functions used in wordle.html.erb */
   return {
@@ -278,7 +281,7 @@ var wordleFunc = (function() {
     /* set-up/reset the game board upon a new game. */
     setUp: function(json) {
 
-        // set ids for squares (0-29: user input, 30-56: keyboard)
+        // set ids for squares
         var squares = document.querySelectorAll('textarea');
         for(var i=0; i<squares.length; i++)
         {
@@ -337,17 +340,19 @@ var wordleFunc = (function() {
 
         // possible answer list (app/public/wordAnswerList.txt)
         answerArray = jsonData["wordAnswerList"].split(" ");
-        console.log(answerArray);
         
         // get a random word from answer list
         var randIndex = Math.floor(Math.random() * (answerArray.length - 1));
         randomWord = answerArray[randIndex].toUpperCase();
+        // randomWord = "AUDIO";
     },
 
     /* Whenever the user enters a key, use one of our helpers to handle it. */
     handleInput: function(key)
     {
         if(gameOver) return;
+
+        if(animate.currentlyAnimating()) return;
 
         var wordLen = wordSoFar.length;
 
@@ -375,6 +380,7 @@ var wordleFunc = (function() {
           curSquare.value = String.fromCharCode(key);
           curSquare.setAttribute("style", "border: solid grey var(--square-border);");
           wordSoFar += String.fromCharCode(key);
+          animate.bounce(curSquare);
         }
 
         return;
@@ -428,6 +434,28 @@ var wordleFunc = (function() {
 
     },
 
+    /* Given a char and a color, update the keyboard to show the user
+   * which letters have been used and their color. */
+  updateKeyboard: function(char, color)
+  {
+    // used to track the color of keys
+    var colorInt = color == green ? 3 : color == yellow ? 2 : 1;
+
+    // Q is at id=30, quwerty[0] = Q
+    var id = qwerty.indexOf(char) + 30;
+
+    var curKey = document.getElementById(String(id));
+    
+    // 0 = white, 1 = grey, 2 = yellow, 3 = green
+    var curKeyColor = keyboardColors[id-30];
+    
+    // dont change yellow to grey or green to yellow.
+    if(colorInt <= curKeyColor) return;
+
+    curKey.setAttribute("style", "color: white; background-color: " + color);
+    keyboardColors[id-30] = colorInt;
+  },
+
     /* The application entry point, gets the users info from home_controller: def wordle.
        Passes that info setUp to start the game */
     getUserInfo: function() {
@@ -456,7 +484,100 @@ var wordleFunc = (function() {
         }
       })
     }
-
-  };})();
+  }
+})();
 
 window.wordleFunc = wordleFunc;
+
+var animate = (function() {
+
+  // if a long animation is in progress, ignore all user input.
+  var animating = false;
+
+  return {
+
+    // called upon input
+    bounce: function(element) {
+      gsap.fromTo(element, {duration: .3, scale: 1.125}, {scale: 1.0, ease: "bounce.out"});
+    },
+
+    // called upon delete
+    rotate: function(element) {
+      gsap.fromTo(element, {duration: .3, rotation: '-35deg'}, {rotation: '0deg', ease: "elastic.out"});
+    },
+
+    /* Flip tiles over and color them and their corresponding key on the virtual keyboard */
+    reveal: function(elementArr, rowColors, keyboardColors, row, i, letters) { 
+      animating = true;
+      
+      const dur = .35; 
+      const rowStart = row*5;
+      if(i >= 5) 
+      { 
+        setTimeout(function()
+        {
+          animating = false;
+        }, dur * 1000);
+
+        return;
+      }
+
+      // flip down
+      gsap.to(elementArr[i+rowStart], {transform: "rotateX(90deg)", duration: dur, ease:"circ.in"});
+
+      // wait until animation above is done
+      setTimeout(function() {
+
+        // flip back up
+        gsap.to(elementArr[i+rowStart], {transform: "rotateX(0deg)", duration: dur, ease:"circ.out"});
+
+        // update the color the square and its corresponding key on the keyboard
+        elementArr[i+rowStart].setAttribute("style", rowColors[i]);
+        wordleFunc.updateKeyboard(letters.charAt(i), keyboardColors[i]);
+
+        // start next square animation at the same time as this square starts flipping back up
+        animate.reveal(elementArr, rowColors, keyboardColors, row, i+1, letters);
+      }, dur * 1000);
+
+    },
+
+    // after a win or loss
+    gameOverAnimation: function(elements, won) {
+
+      // spin the tiles
+      if(won)
+        for(var i = 0; i < elements.length; i++)
+          gsap.fromTo(elements[i], {duration: 1, rotation: '360deg'}, {rotation: '0deg'});   
+
+      // shake the tiles
+      else
+      {
+        var tl = gsap.timeline({defaults: {duration: 0.2}});
+        tl.repeat(3);
+        
+        for(var i = 0; i < elements.length; i++)
+          tl.fromTo(elements[i], {scale: 1.25}, {scale: 1.0}, "<+=0");
+      }
+      
+    },
+
+    // when displaying stats after game
+    toastAnimation: function(toastElement, barElements) {
+      
+      // reveal the toast container
+      gsap.from(toastElement, {duration: 1, opacity: 0});
+      gsap.from(toastElement, {duration: 1, scale: 0, ease: "bounce.out"});
+
+      // animate the bars 
+      var tl = gsap.timeline({defaults: {duration: 2}});
+      for(var i = 0; i < barElements.length; i++)
+        tl.from(barElements[i], {width: "0%"}, "<+=0");
+    },
+
+    currentlyAnimating: function() {
+      return animating;
+    }
+  }
+})();
+
+window.animate = animate;
